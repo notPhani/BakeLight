@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+src/BakeLight.egg-info/PKG-INFO
+src/BakeLight.egg-info/SOURCES.txt
+src/BakeLight.egg-info/dependency_links.txt
+src/BakeLight.egg-info/top_level.txt
+test/test.py
