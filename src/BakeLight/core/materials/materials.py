@@ -55,7 +55,8 @@ class Material:
         scatter_dir = normal + torch.randn_like(normal)
         scatter_dir = scatter_dir / (torch.norm(scatter_dir, dim=-1, keepdim=True) + 1e-8)
         attenuation = self.color
-        return scatter_dir, attenuation, None
+        
+        return hit_point, scatter_dir, attenuation
 
 # --- Helper functions ---
 def reflect(v, n):
