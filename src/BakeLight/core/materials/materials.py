@@ -17,14 +17,14 @@ class Material:
         Returns (scattered_ray_direction, attenuation, emission)
         """
         if self.emission is not None:
-            return None, None, self.emission
+            return None, None, self.emission, hit_point
 
         # Lambertian (diffuse)
         if self.metallic < 0.1 and self.ior == 1.0:
             scatter_dir = normal + torch.randn_like(normal)
             scatter_dir = scatter_dir / (torch.norm(scatter_dir, dim=-1, keepdim=True) + 1e-8)
             attenuation = self.color
-            return scatter_dir, attenuation, None
+            return scatter_dir, attenuation, None, hit_point
 
         # Metal (specular)
         if self.metallic >= 0.1 and self.ior == 1.0:
@@ -33,7 +33,7 @@ class Material:
             scatter_dir = reflected + fuzz
             scatter_dir = scatter_dir / (torch.norm(scatter_dir, dim=-1, keepdim=True) + 1e-8)
             attenuation = self.color
-            return scatter_dir, attenuation, None
+            return scatter_dir, attenuation, None, hit_point
 
         # Dielectric (glass)
         if self.ior != 1.0:
@@ -49,14 +49,14 @@ class Material:
             refracted = refract(unit_direction, normal, refraction_ratio)
             scatter_dir = torch.where(reflect_mask.unsqueeze(-1), reflected, refracted)
             attenuation = torch.ones_like(self.color)
-            return scatter_dir, attenuation, None
+            return scatter_dir, attenuation, None, hit_point
 
         # Default: diffuse
         scatter_dir = normal + torch.randn_like(normal)
         scatter_dir = scatter_dir / (torch.norm(scatter_dir, dim=-1, keepdim=True) + 1e-8)
         attenuation = self.color
-        
-        return hit_point, scatter_dir, attenuation
+
+        return scatter_dir, attenuation, None, hit_point
 
 # --- Helper functions ---
 def reflect(v, n):
