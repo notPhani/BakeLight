@@ -46,5 +46,3 @@ class Sphere:
             material_idx=closest_idx,
             normal=hit_normals
         )
-
-
